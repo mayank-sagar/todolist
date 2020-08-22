@@ -1,0 +1,273 @@
+<html>
+
+
+<head>
+    
+    <link href="scripts/jquery-ui.css" rel=stylesheet />
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Patrick Hand SC', cursive;
+        }
+
+        body {
+            margin:0px;
+            padding:0px;
+            background: url(./assets/background.jpg) no-repeat center center/cover;
+            overflow: scroll;
+        }
+
+        body::before {
+            content: '';
+            display: block;
+            position: fixed;
+            background-color: rgba(0,0,0,0.3);
+            z-index: 1;
+            height: 100vh;
+            width: 100%;
+            top: 0px;
+            left: 0px;
+        }
+    
+        .wrapper {
+            margin:10px auto;
+           max-width:700px;
+            border:2px #000 solid ;
+            border-radius: 10px;
+            padding:20px;
+            margin: 30% auto 0 auto;
+            transform:translateY(-50%);
+            position: relative;
+            z-index: 2;
+            background-color: #fff;
+            box-shadow: 5px 5px 5px #000;
+        }
+        
+        .wrapper > h2 {
+            color: #000;
+            text-align:center;
+            font-size: 3rem;
+        }
+        .closeBtn {
+            position:relative;
+            top:0px;
+            right:4px;
+            cursor: pointer;
+        }  
+    </style>
+    
+    
+</head>
+
+    
+    
+<body>
+
+<h2 id="name of">To Do List</h2>
+<button type=button id="newListBtn" >New List</button>
+    <div id=tabs >
+<div>    
+<ul>
+    <li><a href="#work">Work</a><span class="ui-icon ui-icon-close closeBtn"></span></li>
+    <li><a href="#personal">Personal</a><span class="ui-icon ui-icon-close closeBtn"></span></li>
+</ul>
+    </div>
+    
+    <div class="main-content">
+    
+    <ol id="work">
+        <li><input type="checkbox" /> Find Another Job </li>
+        <li><input type="checkbox" /> Make Transection </li>
+        <li><input type="checkbox" /> Wait for  7PM for Teaching.</li>
+    </ol>
+        <ol id="personal">
+        <li><input type="checkbox" /> Buy some Juice </li>
+        <li><input type="checkbox" /> Do some programming </li>
+        <li><input type="checkbox" /> Laravel Tutorial to complete</li>
+    </ol>
+        
+    </div>
+    </div>
+    <button type=button id="newTaskBtn">Add New Task</button>
+    <div id="newListDialog" title="Enter New List Name">
+    <label for="newListInput">Name of List</label> <input type=text  id="newListInput" >
+    </div>
+    
+    
+    <div id="newTaskDialog" title="Enter New Task Name">
+    <label for="newTaskInput">Name of Task</label> <input type=text  id="newTaskInput" >
+    </div>
+
+
+    <script src="jquery-3.3.1.js"></script>
+    <script src="scripts/jquery-ui.js" ></script>
+    
+    
+    <script>
+    $(function() {
+        
+       $('#tabs').tabs(); 
+        $('#tabs .main-content ol li').css({
+            'border':"1px dotted white",
+            "margin-bottom":"5px",
+            cursor:'pointer'
+        }).closest('ol').sortable({
+            axis:'y',
+            containment:'#tabs'
+        }).closest('#tabs').find('ul').sortable({
+            axis:'x',
+            containment:'#tabs'
+        }).closest('#tabs').find('.main-content ol li').on('mouseover',function() {
+            
+            $(this).css({
+                background:'#f58400',
+                color:'black',
+                'font-weight':'bold'
+            });
+        }).on('mouseout',function() {
+            $(this).css({
+                background:'none',
+                color:'white',
+                'font-weight':'normal'
+            });
+        }).find("input[type='checkbox']").each(function() {
+            addRemoveItemEvent(this);
+        });
+        
+        $('body').children().wrapAll('<div class=wrapper >');
+        $('.wrapper > button#newListBtn').button().css({
+            position:'relative',
+            left:'590px',
+            bottom:'10px'
+        }).click(function() {
+             $('#newListDialog').dialog('open'); 
+        });
+        
+        $('.wrapper > button#newTaskBtn').button().css({
+            position:'relative',
+            top:'10px',
+            bottom:'0px',
+            left:'545px'
+        }).on('click',function() {    
+            $('#newTaskDialog').dialog('open');
+        });
+        
+        $('#newListDialog').dialog({
+        width:350, 
+        resizable:false,
+         modal:true,
+         autoOpen:false,
+            buttons:{
+               
+                Cancel:function() {
+                    $('#newListInput').val("");
+                    $('#newListDialog').dialog('close');
+                },
+                Add: function() {
+                  var listName = $('#newListInput').val();
+                    idListName = listName.replace(/\s/g,"");
+                    $('.wrapper #tabs ul').append('<li><a href="#'+idListName+'" >'+listName+'</a><span class="ui-icon ui-icon-close closeBtn"></span></li>');
+                    refreshEventCloseBtn()
+                    $('<ol id="'+idListName+'">  </ol>').appendTo('.main-content').sortable({
+            axis:'y',
+            containment:'#tabs'
+        });
+                    $("#tabs").tabs('refresh')
+                     var tabCount = $('#tabs ul li').length
+                     $("#tabs").tabs("option","active",tabCount-1)
+                $('#newListInput').val("");
+                
+                    $('#newListDialog').dialog('close');
+                
+                }
+                
+            },
+            
+        });
+        
+        $('#newTaskDialog').dialog({
+            width:350, 
+            modal:true,
+            resizable:false,
+            autoOpen:false,
+            buttons: {
+                Cancel: function() {
+                    $("#newTaskInput").val("");
+                    $(this).dialog('close');
+                },
+            Add: function() {
+                var task = $("#newTaskInput").val();
+                var activeTab = $("#tabs").tabs("option","active");
+                $(($('#tabs .main-content ol')[activeTab])).append("<li><input type='checkbox' >"+task+"</li>").children("li:last").css({
+            'border':"1px dotted white",
+            "margin-bottom":"5px",
+            cursor:'pointer'
+        }).on('mouseover',function() {
+            
+            $(this).css({
+                background:'#f58400',
+                color:'black',
+                'font-weight':'bold'
+            });
+        }).on('mouseout',function() {
+            $(this).css({
+                background:'none',
+                color:'white',
+                'font-weight':'normal'
+            });
+          
+                
+            }).find('input[type="checkbox"]').each(function() {
+        addRemoveItemEvent(this);
+                });
+                
+        $("#newTaskInput").val("");   
+                $(this).dialog('close');
+            }
+    }});
+        
+        
+        function addRemoveItemEvent(selection) {
+            $(selection).on('click',function() {
+               if(this.checked) {
+                   
+                   $(this).parent().slideUp(500,function() {
+                       
+                       alert("Well Done "+$(this).text()+ " Task Completed")
+                       
+                   })
+               } 
+            });
+            
+        }
+        
+        function refreshEventCloseBtn() {
+      $('.closeBtn').on('click',function() {
+          var activeTab = $('#tabs').tabs('option',"active");
+          var maxTabs = $('#tabs ul li').length;
+          if(activeTab == 0 && maxTabs > 1) {
+             activeTab++;
+             } else if(activeTab == maxTabs-1 && maxTabs > 1) {
+                 activeTab--;
+             } else if(maxtabs > 1){
+                 activeTab++;
+             }
+          $('#tabs').tabs('option',"active",activeTab);
+           $('#tabs').tabs('refresh');
+           var tabId = $(this).closest('li').find('a').attr("href");
+          $(this).closest('li').fadeOut(1000)
+          $(tabId).slideUp(1000)
+          
+      });
+        }
+       
+        refreshEventCloseBtn()
+        
+    });
+    
+    </script>
+    
+</body>
+
+
+</html>
