@@ -1,20 +1,21 @@
 <html>
-
-
 <head>
     
     <link href="scripts/jquery-ui.css" rel=stylesheet />
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet">
     <style>
         * {
-            font-family: 'Patrick Hand SC', cursive;
+            font-family: 'Comfortaa', cursive;
         }
 
         body {
             margin:0px;
             padding:0px;
-            background: url(./assets/background.jpg) no-repeat center center/cover;
+            /* background: url(./assets/background.jpg) no-repeat center center/cover; */
             overflow: scroll;
+            background: linear-gradient(45deg, #fb7813 33%, #40bad5 33% );
+          
+
         }
 
         body::before {
@@ -32,39 +33,55 @@
         .wrapper {
             margin:10px auto;
            max-width:700px;
-            border:2px #000 solid ;
+            /* border:2px rgba(92, 198, 212, 0.5) solid ; */
             border-radius: 10px;
             padding:20px;
             margin: 30% auto 0 auto;
             transform:translateY(-50%);
             position: relative;
             z-index: 2;
-            background-color: #fff;
-            box-shadow: 5px 5px 5px #000;
+            background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%);
+            -webkit-box-shadow: 0px 2px 16px 2px rgba(79,227,197,1);
+            -moz-box-shadow: 0px 2px 16px 2px rgba(79,227,197,1);
+            box-shadow: 0px 2px 16px 2px rgba(0,0,0,0.5);
         }
         
-        .wrapper > h2 {
+        /* .wrapper > h2 {
+            color: #000;
+            text-align:center;
+            font-size: 3rem;
+            
+        } */
+        #name-of {
             color: #000;
             text-align:center;
             font-size: 3rem;
         }
+        .tracking-in-expand-fwd{-webkit-animation:tracking-in-expand-fwd .8s cubic-bezier(.215,.61,.355,1.000) both;animation:tracking-in-expand-fwd .8s cubic-bezier(.215,.61,.355,1.000) both}
+        @-webkit-keyframes tracking-in-expand-fwd{0%{letter-spacing:-.5em;-webkit-transform:translateZ(-700px);transform:translateZ(-700px);opacity:0}40%{opacity:.6}100%{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}@keyframes tracking-in-expand-fwd{0%{letter-spacing:-.5em;-webkit-transform:translateZ(-700px);transform:translateZ(-700px);opacity:0}40%{opacity:.6}100%{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}
         .closeBtn {
             position:relative;
             top:0px;
             right:4px;
             cursor: pointer;
         }  
+        .form-group{
+            display: flex;
+            flex-direction: column;
+        }
+
+
     </style>
     
     
 </head>
 
     
-    
 <body>
-
-<h2 id="name of">To Do List</h2>
-<button type=button id="newListBtn" >New List</button>
+<div>
+<h2 class="tracking-in-expand-fwd" id="name-of">To Do List</h2>
+</div>
+<button style="margin-left: 38px;" type=button id="newListBtn" >List +</button>
     <div id=tabs >
 <div>    
 <ul>
@@ -88,14 +105,15 @@
         
     </div>
     </div>
-    <button type=button id="newTaskBtn">Add New Task</button>
-    <div id="newListDialog" title="Enter New List Name">
+    <button style="margin-left: 73px;" type=button id="newTaskBtn">Task +</button>
+    <div class="form-group" id="newListDialog" title="Enter New List Name">
     <label for="newListInput">Name of List</label> <input type=text  id="newListInput" >
     </div>
     
     
-    <div id="newTaskDialog" title="Enter New Task Name">
-    <label for="newTaskInput">Name of Task</label> <input type=text  id="newTaskInput" >
+    <div class="form-group" id="newTaskDialog" title="Enter New Task Name">
+    <label for="newTaskInput">Name of Task</label>
+    <input  type=text  id="newTaskInput" >
     </div>
 
 
@@ -120,14 +138,13 @@
         }).closest('#tabs').find('.main-content ol li').on('mouseover',function() {
             
             $(this).css({
-                background:'#f58400',
+                'background-color':'orange',
                 color:'black',
                 'font-weight':'bold'
             });
         }).on('mouseout',function() {
             $(this).css({
-                background:'none',
-                color:'white',
+                'background-color':'white',
                 'font-weight':'normal'
             });
         }).find("input[type='checkbox']").each(function() {
@@ -205,18 +222,15 @@
         }).on('mouseover',function() {
             
             $(this).css({
-                background:'#f58400',
+                'background-color':'#f58400',
                 color:'black',
                 'font-weight':'bold'
             });
         }).on('mouseout',function() {
             $(this).css({
-                background:'none',
-                color:'white',
+                'background-color':'white',
                 'font-weight':'normal'
-            });
-          
-                
+            });        
             }).find('input[type="checkbox"]').each(function() {
         addRemoveItemEvent(this);
                 });
