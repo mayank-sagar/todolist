@@ -107,7 +107,10 @@
     </div>
     <button style="margin-left: 73px;" type=button id="newTaskBtn">Task +</button>
     <div class="form-group" id="newListDialog" title="Enter New List Name">
-    <label for="newListInput">Name of List</label> <input type=text  id="newListInput" >
+
+
+    <label for="newListInput">Name of List</label> <input type="text"  id="newListInput" class='enableOnInput'>
+    
     </div>
     
     
@@ -181,13 +184,20 @@
                     $('#newListDialog').dialog('close');
                 },
                 Add: function() {
+                    if($('#newListInput').val().length == 0){
+                        $(".ui-dialog-buttonpane").prop( "disabled", true );
+                    }
+                    else {
+                        $(".ui-dialog-buttonpane").prop( "disabled", false );
                   var listName = $('#newListInput').val();
                     idListName = listName.replace(/\s/g,"");
                     $('.wrapper #tabs ul').append('<li><a href="#'+idListName+'" >'+listName+'</a><span class="ui-icon ui-icon-close closeBtn"></span></li>');
                     refreshEventCloseBtn()
+                    }
                     $('<ol id="'+idListName+'">  </ol>').appendTo('.main-content').sortable({
             axis:'y',
             containment:'#tabs'
+                    
         });
                     $("#tabs").tabs('refresh')
                      var tabCount = $('#tabs ul li').length
