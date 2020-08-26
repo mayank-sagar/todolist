@@ -65,6 +65,12 @@
             right:4px;
             cursor: pointer;
         }  
+        .form-group{
+            display: flex;
+            flex-direction: column;
+        }
+
+
     </style>
     
     
@@ -100,13 +106,14 @@
     </div>
     </div>
     <button style="margin-left: 73px;" type=button id="newTaskBtn">Task +</button>
-    <div id="newListDialog" title="Enter New List Name">
+    <div class="form-group" id="newListDialog" title="Enter New List Name">
     <label for="newListInput">Name of List</label> <input type=text  id="newListInput" >
     </div>
     
     
-    <div id="newTaskDialog" title="Enter New Task Name">
-    <label for="newTaskInput">Name of Task</label> <input type=text  id="newTaskInput" >
+    <div class="form-group" id="newTaskDialog" title="Enter New Task Name">
+    <label for="newTaskInput">Name of Task</label>
+    <input  type=text  id="newTaskInput" >
     </div>
 
 
@@ -223,9 +230,7 @@
             $(this).css({
                 'background-color':'white',
                 'font-weight':'normal'
-            });
-          
-                
+            });        
             }).find('input[type="checkbox"]').each(function() {
         addRemoveItemEvent(this);
                 });
